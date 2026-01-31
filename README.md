@@ -61,15 +61,10 @@
 
 ## 轶事
 
-ChangAkira录制演示与测试视频录了一整夜（12小时）。
+1. ChangAkira录制演示与测试视频录了一整夜（12小时）。
 
-<figure style="text-align: center; margin-top: 20px;">
-    <img src="image.png" alt="录完后拍摄的窗外" width="75%" 
-  style="border-radius: 5px; 
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" 
-  />
-    
-<figcaption style="color: gray; font-size: 0.9em; margin-top: 10px; font-style: italic;">
-    天亮了，梦没醒
-</figcaption>
-</figure>
+<div align="center">
+  <img src="image.png" alt="录完后拍摄的窗外" width="50%" />
+  <br />
+  <sub><i>天亮了，梦没醒</i></sub>
+</div>
