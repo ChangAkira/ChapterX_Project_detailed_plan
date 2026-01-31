@@ -1,0 +1,912 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>--第十章--</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="./icons/iconfont.css">
+    <script src="../marked.min.js"></script>
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'physics'] // 添加需要的扩展包
+            },
+            svg: { fontCache: 'global' } // 使用 SVG 渲染模式
+        };
+    </script>
+
+    <script src="../MathJax-master/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* 新的布局结构 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: '微软雅黑', sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            border-radius: 10px;
+
+            display: flex;
+            flex: 1;
+        }
+
+        /* 左边栏样式 */
+        .sidebar {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            width: 250px;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -10px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 0 0 10px 0;
+        }
+
+        .sidebar-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background-color: #2d2d2d;
+            border: 3px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .sidebar-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar-history {
+            flex: 1;
+            padding: 15px;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #2a2a2a;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            background-color: #3a3a3a;
+        }
+
+        .sidebar-footer {
+            padding: 15px 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            /* 控制两个链接之间的间距 */
+        }
+
+        .sidebar-link {
+            display: inline-block;
+            padding: 5px 40px;
+            background-color: #333;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            border: 1px solid #444;
+        }
+
+        .sidebar-link:hover {
+            background-color: #444;
+        }
+
+        /* 主内容区域样式 */
+        #first-container {
+            border-radius: 10px;
+            box-shadow: -3px 0 10px rgba(0, 0, 0, 0.1);
+            /* 轻微阴影 */
+            margin-left: 5px;
+            /* 给sidebar留出一点空间 */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header.major.special {
+            border-radius: 10px;
+            flex-shrink: 0;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        header.major.special h2 {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 0.5em;
+        }
+
+        #response-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f4f7f9;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #response-container p {
+            padding: 15px;
+            border-radius: 5px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        #response-container p strong {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #chatForm {
+            flex-shrink: 0;
+            background: #fff;
+            padding: 30px;
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-right: 60px;
+            border-radius: 10px;
+        }
+
+        #chatForm textarea {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-right: 10px;
+            font-size: 16px;
+            resize: none;
+            line-height: 1.5;
+            overflow: auto;
+            min-height: 40px;
+            max-height: 150px;
+        }
+
+        #chatForm textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        #chatForm .actions {
+            margin: 0;
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 15px;
+        }
+
+        #chatForm .actions li {
+            margin: 0;
+        }
+
+        #chatForm .actions button {
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 4px solid red;
+            background-color: white;
+            color: red;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #chatForm .actions button.primary {
+            border-color: rgba(0, 100, 0, 0.348);
+            color: darkgreen;
+        }
+
+        #chatForm .actions button.primary:hover {
+            background-color: rgba(84, 179, 101, 0.229);
+            opacity: 1;
+        }
+
+        #chatForm .actions button.button {
+            border-color: rgba(139, 0, 0, 0.351);
+            color: darkred;
+        }
+
+        #chatForm .actions button.button:hover {
+            background-color: rgba(255, 46, 9, 0.097);
+            opacity: 1;
+        }
+
+        #chatForm .actions button.upload {
+            border-color: rgba(99, 154, 255, 0.714);
+            color: rgba(21, 101, 220, 0.903);
+        }
+
+        #chatForm .actions button.upload:hover {
+            background-color: rgba(34, 89, 243, 0.158);
+            opacity: 1;
+        }
+
+        #chatForm .actions button:disabled {
+            background-color: rgba(0, 100, 0, 0.348);
+            cursor: not-allowed;
+        }
+
+        /* 页脚样式，确保在所有内容下方 */
+        #footer-wrapper {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        #footer {
+            border-radius: 8px 8px 0 0;
+            /* 顶部圆角 */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            /* 顶部轻微阴影 */
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f4f7f9c3;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        #footer .icons li a span {
+            color: #999;
+            transition: color 0.3s ease;
+            font-size: 2em;
+        }
+
+        #footer .icons {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #footer .icons li a span:hover {
+            color: #3498db;
+        }
+
+        #footer .copyright {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #footer .copyright li {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        #footer .copyright li a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        /* 消息气泡样式 */
+        .user-message-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .ai-message-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .message-bubble {
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 16px;
+        }
+
+        .user-message-container .message-bubble {
+            background-color: #e0f7fa;
+            border: 1px solid #b2ebf2;
+            text-align: right;
+            padding: 10px 15px;
+        }
+
+        .ai-message-container .message-bubble {
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            text-align: left;
+            padding: 10px 15px;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 4px;
+            background-color: #333;
+            animation: blink 1s steps(5, start) infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* 底部波浪样式 */
+        .wiiuii_layout {
+            width: 100%;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: var(--footer-bg);
+        }
+
+        .editorial {
+            display: block;
+            width: 100%;
+            height: 40px;
+            margin: 0;
+        }
+
+        .parallax>use {
+            animation: move-forever 12s linear infinite;
+        }
+
+        .parallax>use:nth-child(1) {
+            animation-delay: -2s;
+        }
+
+        .parallax>use:nth-child(2) {
+            animation-delay: -2s;
+            animation-duration: 5s;
+        }
+
+        .parallax>use:nth-child(3) {
+            animation-delay: -4s;
+            animation-duration: 3s;
+        }
+
+        @keyframes move-forever {
+            0% {
+                transform: translate(-90px, 0%);
+            }
+
+            100% {
+                transform: translate(85px, 0%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 主内容和侧边栏并排的容器 -->
+    <div class="main-wrapper">
+        <!-- 左侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-avatar">
+                <img src="./avatar/user.png" alt="用户头像">
+            </div>
+            <div class="sidebar-history">
+                <p>HISTORY:</p>
+                <div class="history-item">
+                    <span>什么是勾股定理？</span>
+
+                </div>
+                <div class="history-item">
+                    <span>请为我介绍中国剩余定理</span>
+                </div>
+                <div class="history-item">
+                    <span>为我介绍三本中国古代数学典籍</span>
+                </div>
+                <div class="history-item">
+                    <span>列表格对比一下群，环，格的异同点</span>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <a href="../html5up-photon_VER1/" class="sidebar-link">返回首页</a>
+                <input type="file" name="file" id="uploadFile" style="display: none;">
+                <a href="#" class="sidebar-link" id="triggerUpload">上传文档</a>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div id="first-container">
+            <header class="major special">
+                <h2>第十章</h2>
+            </header>
+
+            <div id="response-container">
+            </div>
+
+            <form id="chatForm">
+                <textarea name="demo-message" id="demo-message" placeholder="回车发送。SHIFT+回车换行" rows="2"></textarea>
+                <ul class="actions">
+                    <li><button type="button" id="send-abort-button" class="primary"><span
+                                class="iconfont icon-paper-plane"></span></button></li>
+                    <li>
+                        <button type="button" id="upload-image-button" class="upload">
+                            <span class="iconfont icon-image"></span>
+                        </button>
+                        <input type="file" id="image-upload-input" accept="image/*" style="display: none;">
+                    </li>
+
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚包装器，确保在所有内容下方 -->
+    <div id="footer-wrapper">
+        <section id="footer">
+            <ul class="icons">
+                <li><a href="https://github.com/ChangAkira"><span class="iconfont icon-github"></span></a></li>
+                <li><a href="mailto://a259759666@163.com"><span class="iconfont icon-envelope"></span></a></li>
+            </ul>
+
+            <ul class="copyright">
+                <li>&copy; 第十章</li>
+            </ul>
+        </section>
+
+        <!-- 底部波浪 -->
+        <div class="wiiuii_layout">
+            <svg class="editorial" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none">
+                <defs>
+                    <path id="gentle-wave" d="M-160 44c30 0 
+            58-18 88-18s
+            58 18 88 18 
+            58-18 88-18 
+            58 18 88 18
+            v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="50" y="0" fill="#4579e2" />
+                    <use xlink:href="#gentle-wave" x="50" y="3" fill="#3461c1" />
+                    <use xlink:href="#gentle-wave" x="50" y="6" fill="#2d55aa" />
+                </g>
+            </svg>
+        </div>
+    </div>
+
+
+
+
+    <script src="../thetwo/assets/js/jquery.min.js"></script>
+    <script src="../thetwo/assets/js/jquery.scrolly.min.js"></script>
+    <script src="../thetwo/assets/js/browser.min.js"></script>
+    <script src="../thetwo/assets/js/breakpoints.min.js"></script>
+    <script src="../thetwo/assets/js/util.js"></script>
+    <script src="../thetwo/assets/js/main.js"></script>
+    <script>
+        let isSending = false; // 标记当前是否正在发送消息
+        let controller = null; // 用于中止请求的 AbortController
+
+        const chatForm = document.getElementById("chatForm");
+        const messageInput = document.getElementById("demo-message");
+        const responseContainer = document.getElementById("response-container");
+        const sendAbortButton = document.getElementById("send-abort-button");
+        const sendAbortButtonSpan = sendAbortButton.querySelector("span");
+        const uploadImageButton = document.getElementById('upload-image-button'); // 获取上传图片按钮
+        const imageUploadInput = document.getElementById('image-upload-input'); // 获取隐藏的文件输入框
+
+        chatForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            if (!isSending) {
+                await sendMessage();
+            } else {
+                abortMessage();
+            }
+        });
+
+        messageInput.addEventListener("keydown", async (event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                if (!isSending) {
+                    await sendMessage();
+                } else {
+                    abortMessage();
+                }
+            }
+        });
+
+        sendAbortButton.addEventListener("click", () => {
+            if (!isSending) {
+                sendMessage();
+            } else {
+                abortMessage();
+            }
+        });
+
+        // 上传图片按钮的事件监听器
+        uploadImageButton.addEventListener('click', function () {
+            imageUploadInput.click(); // 点击按钮时触发文件选择框
+        });
+
+        // 文件选择输入框的事件监听器
+        imageUploadInput.addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const base64Image = event.target.result.split(',')[1]; // 获取Base64编码部分
+                    sendImageToOCR(base64Image);
+                };
+                reader.readAsDataURL(file); // 将文件读取为Data URL (Base64编码)
+            }
+        });
+
+        // 发送消息的函数 (修改后)
+        async function sendMessage() {
+            if (messageInput.value.trim() === "") {
+                return; // 不发送空消息
+            }
+
+            isSending = true;
+            sendAbortButton.innerHTML = '<span class="iconfont icon-stopcircle"></span>'; // 更改按钮文本/图标
+            sendAbortButton.classList.remove("primary");
+            sendAbortButton.classList.add("button");
+            messageInput.disabled = true; // 发送时禁用输入框
+
+            const userMessage = messageInput.value;
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("user-message-container");
+            const userBubble = document.createElement("div");
+            userBubble.classList.add("message-bubble");
+            userBubble.innerHTML = escapeHTML(userMessage);
+            userMessageDiv.appendChild(userBubble);
+            responseContainer.appendChild(userMessageDiv);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+
+            MathJax.typesetPromise([userBubble]).catch((err) => console.error(err.message));
+            renderMarkdown(userBubble);
+
+            const replyContainerDiv = document.createElement("div");
+            replyContainerDiv.classList.add("ai-message-container");
+            const replyBubble = document.createElement("div");
+            replyBubble.classList.add("message-bubble");
+            replyBubble.innerHTML = `<span class="typing-cursor">|</span>`;
+            replyContainerDiv.appendChild(replyBubble);
+            responseContainer.appendChild(replyContainerDiv);
+
+            controller = new AbortController();
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/chat', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: userMessage }),
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let aiReplyText = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    console.log("reader.read() 返回:", { done, value });
+                    if (done) {
+                        console.log("Stream finished - done is true, 循环将要退出");
+                        break;
+                    }
+                    const textChunk = decoder.decode(value, { stream: true });
+                    const lines = textChunk.split('\n\n').filter(line => line.startsWith("data: "));
+                    for (const line of lines) {
+                        let jsonString = line;
+                        if (line.startsWith("data: data: ")) {
+                            jsonString = line.substring(12);
+                        } else if (line.startsWith("data: ")) {
+                            jsonString = line.substring(6);
+                        }
+
+                        console.log("原始 SSE 数据行 (substring 前):", line);
+                        console.log("substring 处理后的 JSON 字符串:", jsonString);
+
+                        if (jsonString === "[DONE]") {
+                            console.log("SSE stream done signal received, 循环将要退出并 break");
+                            reader.cancel();
+                            break;
+                        }
+                        try {
+                            const jsonData = JSON.parse(jsonString);
+                            if (jsonData?.message?.content) {
+                                const contentChunk = jsonData.message.content;
+                                aiReplyText += contentChunk;
+                                replyBubble.innerHTML = aiReplyText + `<span class="typing-cursor">|</span>`;
+                                MathJax.typesetPromise([replyBubble]).catch((err) => console.error(err.message));
+                                renderMarkdown(replyBubble);
+                                responseContainer.scrollTop = responseContainer.scrollHeight;
+                            }
+                            if (jsonData?.done) { // 检查 'done' 字段，表示流结束
+                                console.log("Ollama stream finished - done is true, breaking loop");
+                                reader.cancel();
+                                break;
+                            }
+                        } catch (error) {
+                            console.error("JSON 解析错误:", error, "原始数据:", jsonString);
+                        }
+                    }
+                }
+
+                console.log("准备移除 typing cursor, replyBubble.innerHTML 设置为:", aiReplyText);
+                replyBubble.innerHTML = aiReplyText;
+                MathJax.typesetPromise([replyBubble]).catch((err) => console.error(err.message));
+                renderMarkdown(replyBubble);
+                console.log("typing cursor 移除代码 执行完成");
+
+            } catch (error) {
+                if (error.name === "AbortError") {
+                    replyBubble.innerHTML = `请求已停止`;
+                } else {
+                    replyBubble.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                }
+            } finally {
+                isSending = false;
+                sendAbortButton.innerHTML = '<span class="iconfont icon-paper-plane"></span>'; // 恢复按钮文本/图标
+                sendAbortButton.classList.remove("button");
+                sendAbortButton.classList.add("primary");
+                messageInput.disabled = false; // 恢复启用输入框
+                messageInput.value = "";
+                responseContainer.scrollTop = responseContainer.scrollHeight;
+                controller = null;
+                messageInput.focus();
+            }
+        }
+
+        async function sendImageToOCR(base64Image) {
+            isSending = true; // 标记为正在发送消息（尽管是图片上传）
+            sendAbortButton.innerHTML = '<span class="iconfont icon-stopcircle"></span>'; // 更改按钮文本/图标
+            sendAbortButton.classList.remove("primary");
+            sendAbortButton.classList.add("button");
+            messageInput.disabled = true; // 发送时禁用输入框
+
+            const userMessageDiv = document.createElement("div");
+            userMessageDiv.classList.add("user-message-container");
+            const userBubble = document.createElement("div");
+            userBubble.classList.add("message-bubble");
+            userBubble.innerHTML = '上传图片中...'; // 显示上传状态
+            userMessageDiv.appendChild(userBubble);
+            responseContainer.appendChild(userMessageDiv);
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+            MathJax.typesetPromise([userBubble]).catch((err) => console.error(err.message));
+            renderMarkdown(userBubble);
+
+            const replyContainerDiv = document.createElement("div");
+            replyContainerDiv.classList.add("ai-message-container");
+            const replyBubble = document.createElement("div");
+            replyBubble.classList.add("message-bubble");
+            replyBubble.innerHTML = `<span class="typing-cursor">|</span>`;
+            replyContainerDiv.appendChild(replyBubble);
+            responseContainer.appendChild(replyContainerDiv);
+
+            controller = new AbortController();
+            responseContainer.scrollTop = responseContainer.scrollHeight;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/ocr', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: base64Image }),
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let aiReplyText = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    console.log("OCR Response reader.read() 返回:", { done, value });
+                    if (done) {
+                        console.log("OCR Response Stream finished - done is true, 循环将要退出");
+                        break;
+                    }
+                    const textChunk = decoder.decode(value, { stream: true });
+                    const lines = textChunk.split('\n\n').filter(line => line.startsWith("data: "));
+                    for (const line of lines) {
+                        let jsonString = line;
+                        if (line.startsWith("data: data: ")) {
+                            jsonString = line.substring(12);
+                        } else if (line.startsWith("data: ")) {
+                            jsonString = line.substring(6);
+                        }
+
+                        console.log("原始 OCR SSE 数据行 (substring 前):", line);
+                        console.log("substring 处理后的 OCR JSON 字符串:", jsonString);
+
+                        if (jsonString === "[DONE]") {
+                            console.log("OCR SSE stream done signal received, 循环将要退出并 break");
+                            reader.cancel();
+                            break;
+                        }
+                        try {
+                            const jsonData = JSON.parse(jsonString);
+                            if (jsonData?.message?.content) {
+                                const contentChunk = jsonData.message.content;
+                                aiReplyText += contentChunk;
+                                replyBubble.innerHTML = aiReplyText + `<span class="typing-cursor">|</span>`;
+                                MathJax.typesetPromise([replyBubble]).catch((err) => console.error(err.message));
+                                renderMarkdown(replyBubble);
+                                responseContainer.scrollTop = responseContainer.scrollHeight;
+                            }
+                            if (jsonData?.done) { // 检查 'done' 字段，表示流结束
+                                console.log("Ollama stream finished - done is true, breaking loop");
+                                reader.cancel();
+                                break;
+                            }
+                        } catch (error) {
+                            console.error("OCR JSON 解析错误:", error, "原始数据:", jsonString);
+                        }
+                    }
+                }
+
+                console.log("OCR 准备移除 typing cursor, replyBubble.innerHTML 设置为:", aiReplyText);
+                replyBubble.innerHTML = aiReplyText;
+                MathJax.typesetPromise([replyBubble]).catch((err) => console.error(err.message));
+                renderMarkdown(replyBubble);
+                console.log("OCR typing cursor 移除代码 执行完成");
+
+            } catch (error) {
+                if (error.name === "AbortError") {
+                    replyBubble.innerHTML = `请求已停止`;
+                } else {
+                    replyBubble.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                }
+            } finally {
+                isSending = false;
+                sendAbortButton.innerHTML = '<span class="iconfont icon-paper-plane"></span>'; // 恢复按钮文本/图标
+                sendAbortButton.classList.remove("button");
+                sendAbortButton.classList.add("primary");
+                messageInput.disabled = false;
+                responseContainer.scrollTop = responseContainer.scrollHeight;
+                controller = null;
+                messageInput.focus();
+                imageUploadInput.value = ''; // 清空文件输入，以便下次可以上传同一文件
+            }
+        }
+
+
+        function abortMessage() {
+            if (controller) {
+                controller.abort();
+            }
+            isSending = false; // 确保中止后状态更新
+            sendAbortButton.innerHTML = '<span class="iconfont icon-paper-plane"></span>'; // 恢复按钮文本/图标
+            sendAbortButton.classList.remove("button");
+            sendAbortButton.classList.add("primary");
+            messageInput.disabled = false; // 恢复启用输入框
+            messageInput.focus();
+        }
+
+        // 转义 HTML 特殊字符（排除 Markdown 语法中的特殊字符）
+        function escapeHTML(str) {
+            const markdownChars = ['#', '-', '*', '|', '`', '_', '[', ']', '(', ')', '!'];
+            const div = document.createElement("div");
+            div.innerText = str;
+            let escapedText = div.innerHTML;
+
+            // 恢复 Markdown 特殊字符
+            markdownChars.forEach(char => {
+                escapedText = escapedText.replace(new RegExp(`&${char.charCodeAt(0).toString()};`, 'g'), char);
+            });
+
+            return escapedText;
+        }
+
+        // 手动触发 Markdown 渲染
+        function renderMarkdown(container) {
+            const markdownContent = container.innerHTML;
+            container.innerHTML = marked.parse(markdownContent); // 使用 marked.js 渲染 Markdown
+        }
+
+    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const triggerUploadButton = document.getElementById('triggerUpload');
+      const uploadFileInput = document.getElementById('uploadFile');
+  
+      triggerUploadButton.addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止默认的链接跳转行为
+        uploadFileInput.click(); // 触发文件选择框
+      });
+  
+      uploadFileInput.addEventListener('change', function() {
+        const file = this.files[0];
+  
+        if (file) {
+          const formData = new FormData();
+          formData.append('file', file);
+  
+          fetch('http://localhost:5000/api/upload_knowledge', {
+            method: 'POST',
+            body: formData,
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              alert('完成'); // 弹出 "完成" 的提示框
+              console.log('后端响应:', data.message);
+              alert('请注意：知识库已更新，需要重启后端程序才能使更改生效。');
+            } else if (data.error) {
+              alert('上传失败: ' + data.error);
+              console.error('后端错误:', data.error);
+            }
+          })
+          .catch(error => {
+            alert('上传过程中发生错误: ' + error);
+            console.error('前端错误:', error);
+          });
+        } else {
+          console.log('用户取消了文件选择');
+        }
+      });
+    });
+  </script>
+    <script
+        async>window.onload = function () { var a = document.createElement('script'), b = document.getElementsByTagName('script')[0]; a.type = 'text/javascript', a.async = !0, a.src = '/sw-register.js?v=' + Date.now(), b.parentNode.insertBefore(a, b) };</script>
+</body>
+
+</html>
