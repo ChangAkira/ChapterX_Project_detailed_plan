@@ -63,4 +63,4 @@
 
 ChangAkira录制演示与测试视频录了一整夜，然后说：“天亮了，梦没醒”。
 
-![录完后拍摄的窗外](image-1.png)
+<img src="image-1.png" alt="录完后拍摄的窗外" width="50%">
