@@ -17,9 +17,9 @@
 
 ## 核心团队
 
-| <img src="https://github.com/ChangAkira.png" width="100px;"/><br /><sub><b>ChangAkira</b></sub> | <img src="https://github.com/cheng-QAQ.png" width="100px;"/><br /><sub><b>cheng-QAQ</b></sub> | <img src="https://github.com/dwad114514.png" width="100px;"/><br /><sub><b>玉玉</b></sub> | <img src="https://github.com/ioocoder.png" width="100px;"/><br /><sub><b>ioocoder</b></sub> |<img src="https://github.com/wuyong-exe.png" width="100px;"/><br /><sub><b>wuyong-exe</b></sub> |
-| :---: | :---: | :---: |:---: |:---: |
-| [博客](https://changakira.github.io) <br/>[GitHub](https://github.com/changakira)| [GitHub](https://github.com/cheng-QAQ) | [GitHub](https://github.com/dwad114514) | [GitHub](https://github.com/ioocoder) |[GitHub](https://github.com/wuyong-exe) |
+| <img src="https://github.com/ChangAkira.png" width="100px;"/><br /><sub><b>ChangAkira</b></sub> | <img src="https://github.com/cheng-QAQ.png" width="100px;"/><br /><sub><b>cheng-QAQ</b></sub> | <img src="https://github.com/dwad114514.png" width="100px;"/><br /><sub><b>dwad114514</b></sub> | <img src="https://github.com/ioocoder.png" width="100px;"/><br /><sub><b>ioocoder</b></sub> | <img src="https://github.com/wuyong-exe.png" width="100px;"/><br /><sub><b>wuyong-exe</b></sub> |
+| :---------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: |
+|        [博客](https://changakira.github.io) <br/>[GitHub](https://github.com/changakira)        |                            [GitHub](https://github.com/cheng-QAQ)                             |                             [GitHub](https://github.com/dwad114514)                             |                            [GitHub](https://github.com/ioocoder)                            |                             [GitHub](https://github.com/wuyong-exe)                             |
 
 “十方算阁”团队由5名西安电子科技大学在校生组成，进行该项目时（2025.1-2025.4）一名大三，四名大二。
 
